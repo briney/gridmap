@@ -63,9 +63,12 @@ from gridmap.data import clean_path, zdumps, zloads
 from gridmap.runner import _heart_beat
 
 if DRMAA_PRESENT:
+    # from drmaa import (ExitTimeoutException, InvalidJobException,
+    #                    JobControlAction, JOB_IDS_SESSION_ALL, Session,
+    #                    TIMEOUT_NO_WAIT)
     from drmaa import (ExitTimeoutException, InvalidJobException,
-                       JobControlAction, JOB_IDS_SESSION_ALL, Session,
-                       TIMEOUT_NO_WAIT)
+                       JobControlAction, Session)
+    from drmaa.const import (JOB_IDS_SESSION_ALL, TIMEOUT_NO_WAIT)
 
 # Python 2.x backward compatibility
 if sys.version_info < (3, 0):
