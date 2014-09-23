@@ -425,16 +425,6 @@ class JobMonitor(object):
                                            ' with ID %s. Known job IDs are: ' +
                                            '%s'), job_id,
                                           list(self.id_to_job.keys()))
-
-
-                        ## BRYAN
-                        print('Received message from unknown job' +
-                                           ' with ID %s. Known job IDs are: ' +
-                                           '%s'), job_id,
-                                          list(self.id_to_job.keys())
-
-
-
                         return_msg = 'thanks, but no thanks'
                 else:
                     # run check
