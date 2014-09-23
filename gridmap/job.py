@@ -275,6 +275,9 @@ class JobMonitor(object):
 
         self.logger.info("Setting up JobMonitor on %s", self.home_address)
 
+        ## BRYAN
+        print("Setting up JobMonitor on %s", self.home_address)
+
         # uninitialized field (set in check method)
         self.jobs = []
         self.ids = []
@@ -330,18 +333,40 @@ class JobMonitor(object):
 
         # determines in which interval to check if jobs are alive
         self.logger.debug('Starting local hearbeat')
+
+        ## BRYAN
+        print('Starting local hearbeat')
+
+
         local_heart = multiprocessing.Process(target=_heart_beat,
                                               args=(-1, self.home_address, -1,
                                                     "", CHECK_FREQUENCY))
         local_heart.start()
         try:
             self.logger.debug("Starting ZMQ event loop")
+
+            ## BRYAN
+            print("Starting ZMQ event loop")
+
+
             # main loop
             while not self.all_jobs_done():
                 self.logger.debug('Waiting for message')
+
+
+                ## BRYAN 
+                print('Waiting for message')
+
+
                 msg_str = self.socket.recv()
                 msg = zloads(msg_str)
                 self.logger.debug('Received message: %s', msg)
+
+
+                # BRYAN
+                print('Received message: %s', msg)
+
+
                 return_msg = ""
 
                 job_id = msg["job_id"]
@@ -400,6 +425,16 @@ class JobMonitor(object):
                                            ' with ID %s. Known job IDs are: ' +
                                            '%s'), job_id,
                                           list(self.id_to_job.keys()))
+
+
+                        ## BRYAN
+                        print('Received message from unknown job' +
+                                           ' with ID %s. Known job IDs are: ' +
+                                           '%s'), job_id,
+                                          list(self.id_to_job.keys())
+
+
+
                         return_msg = 'thanks, but no thanks'
                 else:
                     # run check
@@ -460,6 +495,21 @@ class JobMonitor(object):
                 self.logger.error("Host: %s", job.host_name)
                 self.logger.error("." * 80)
                 self.logger.error(job.traceback)
+
+
+                ## BRYAN
+
+                print("-" * 80)
+                print("GridMap job traceback for %s:", job.name)
+                print("-" * 80)
+                print("Exception: %s", type(job.ret).__name__)
+                print("Job ID: %s", job.id)
+                print("Host: %s", job.host_name)
+                print("." * 80)
+                print(job.traceback)
+
+
+
                 raise job.ret
 
             # attempt to resubmit
@@ -699,6 +749,11 @@ def _submit_jobs(jobs, home_address, temp_dir='/scratch', white_list=None,
     """
     with Session() as session:
         for job in jobs:
+
+            ## BRYAN
+            print(job)
+
+
             # set job white list
             job.white_list = white_list
 
