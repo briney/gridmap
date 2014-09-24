@@ -355,6 +355,7 @@ class JobMonitor(object):
 
 
                 ## BRYAN 
+                print('all_jobs_done: {}'.format(self.all_jobs_done()))
                 print('Waiting for message')
 
 
@@ -437,6 +438,13 @@ class JobMonitor(object):
                 # send back compressed response
                 self.logger.debug('Sending reply: %s', return_msg)
                 self.socket.send(zdumps(return_msg))
+
+
+                ## BRYAN
+                print('msg["command"] was: {}'.format(msg["command"]))
+                print('sending reply: {}'.format(return_msg))
+
+
         finally:
             # Kill child processes that we don't need anymore
             local_heart.terminate()
@@ -485,21 +493,6 @@ class JobMonitor(object):
                 self.logger.error("Host: %s", job.host_name)
                 self.logger.error("." * 80)
                 self.logger.error(job.traceback)
-
-
-                ## BRYAN
-
-                print("-" * 80)
-                print("GridMap job traceback for %s:", job.name)
-                print("-" * 80)
-                print("Exception: %s", type(job.ret).__name__)
-                print("Job ID: %s", job.id)
-                print("Host: %s", job.host_name)
-                print("." * 80)
-                print(job.traceback)
-
-
-
                 raise job.ret
 
             # attempt to resubmit
@@ -536,7 +529,26 @@ class JobMonitor(object):
             self.logger.debug('%i out of %i jobs completed', num_completed,
                               num_jobs)
 
+
+            ## BRYAN
+            print('{} out of {} jobs completed'.format(num_completed, num_jobs))
+
+
+
         # exceptions will be handled in check_if_alive
+
+
+        ## BRYAN
+        if job.ret != _JOB_NOT_FINISHED:
+            print('job finished')
+        else:
+            print('job NOT finished')
+        if isinstance(job.ret, Exception):
+            print('job.ret is an Exception')
+        else:
+            print('job.ret is NOT an Exception')
+
+
         return all((job.ret != _JOB_NOT_FINISHED and not isinstance(job.ret,
                                                                     Exception))
                    for job in self.jobs)
