@@ -539,14 +539,15 @@ class JobMonitor(object):
 
 
         ## BRYAN
-        if job.ret != _JOB_NOT_FINISHED:
-            print('job finished')
-        else:
-            print('job NOT finished')
-        if isinstance(job.ret, Exception):
-            print('job.ret is an Exception')
-        else:
-            print('job.ret is NOT an Exception')
+        for job in self.jobs:
+            if job.ret != _JOB_NOT_FINISHED:
+                print('job finished')
+            else:
+                print('job NOT finished')
+            if isinstance(job.ret, Exception):
+                print('job.ret is an Exception')
+            else:
+                print('job.ret is NOT an Exception')
 
 
         return all((job.ret != _JOB_NOT_FINISHED and not isinstance(job.ret,
